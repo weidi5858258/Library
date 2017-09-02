@@ -6,7 +6,7 @@
 /***
  void* memcpy(void* destination, const void* source, size_t num);
  */
-void wd_memcpy(void){
+void wd_memcpy2(void){
     char myname[] = "Pierre de fermat";
     printf("%zu\n", strlen (myname));
     printf("%d\n", sizeof (myname));
@@ -24,7 +24,7 @@ void wd_memcpy(void){
 /***
  void* memmove(void* destination, const void* source, size_t num);
  */
-void wd_memmove(void){
+void wd_memmove2(void){
     char str[] = "memmove can be very useful......";
     memmove(str+20, str+15, 11);
     puts(str);
@@ -34,7 +34,7 @@ void wd_memmove(void){
  const void* memchr(const void* ptr, int value, size_t num);
        void* memchr(      void* ptr, int value, size_t num);
  */
-void wd_memchr(void){
+void wd_memchr2(void){
     char* pch;
     char str[] = "Example string";
     pch = (char*)memchr(str, 'p', strlen(str));
@@ -53,7 +53,7 @@ void wd_memchr(void){
  0 the contents of both memory blocks are equal
  >0 the first byte that does not match in both memory blocks has a greater value in ptr1 than in ptr2(if evaluated as unsigned char values)
  */
-void wd_memcmp(void){
+void wd_memcmp2(void){
     char buffer1[] = "DWgaOtP12df0";
     char buffer2[] = "DWGAOTP12DF0";
     int n;
@@ -71,7 +71,7 @@ void wd_memcmp(void){
  void* memset(void* ptr, int value, size_t num);
  Sets the first num bytes of the block of memory pointed by ptr to  the specified value(interpreted as an unsigned char)
  */
-void wd_memset(void){
+void wd_memset2(void){
     char str[] = "almost every programmer should know memset!";
     memset(str, '-', 6);
     puts(str);
