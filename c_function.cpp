@@ -886,6 +886,26 @@ void wd_strcmp(void)
 }
 
 /***
+ int strncasecmp(const char* s1, const char* s2, size_t n);
+ 忽略大小写比较字符串
+ strncasecmp()用来比较参数s1和s2字符串前n个字符，
+ 比较时会自动忽略大小写的差异。
+ 若参数s1和s2字符串相同则返回0，
+ s1若大于s2则返回大于0的值，
+ s1若小于s2则返回小于0的值。
+ */
+void wd_strncasecmp(void)
+{
+    char* a = "aBcDeF";
+    char* b = "AbcDeF";
+
+    if (!strncasecmp(a, b, sizeof(a)))
+    {
+        printf("%s = %s\n", a, b);
+    }
+}
+
+/***
  int strcoll(const char* s1, const char* s2);
  采用目前区域的字符排列次序来比较字符串
  strcoll()会依环境变量LC_COLLATE所指定的文字排列
@@ -1118,6 +1138,21 @@ void wd_strchr(void)
 }
 
 /***
+ char* strrchr(const char* s, int n);
+ 查找字符串中最后出现的指定字符
+ strrchr()用来找出参数s字符串中最后一个出现的参数c地址，
+ 然后将该字符出现的地址返回。
+ 如果找到指定的字符则返回该字符所在地址，否则返回0。
+ */
+void wd_strrchr(void)
+{
+    char* s = "0123456789012345678901234567890";
+    char* p;
+    p = strrchr(s, '5');
+    printf("%s\n", p);
+}
+
+/***
  void* memset(void* s, int c, size_t n);
  将一段内存空间填入某值
  memset()会将参数s所指的内存区域前n个字节以参数c填入，
@@ -1175,6 +1210,21 @@ void wd_strcat(void)
 }
 
 /***
+ char* strncat(char* dest, const char* src, size_t n);
+ 连接两个字符串
+ strcat()会将参数src字符串拷贝n个字符到参数dest所指的字符串末尾。
+ 第一个参数dest要有足够的空间来容纳要拷贝的字符串。
+ 返回参数dest的字符串起始地址。
+ */
+void wd_strncat(void)
+{
+    char a[30] = "string(1)";;
+    char b[] = "string(2) string(3)";
+    printf("before strncat(): %s\n", a);
+    printf("after strncat(): %s\n", strncat(a, b, sizeof(b)));
+}
+
+/***
  size_t strcspn(const char* s, const char* reject);
  返回字符串中连续不含指定字符串内容的字符数
  strcspn()从参数s字符串的开关计算连续的字符，而这些字符
@@ -1185,16 +1235,78 @@ void wd_strcat(void)
  */
 void wd_strcspn(void)
 {
-    char* str="Linux was first developed for 386/486-based pcs.";
+    char* str = "Linux was first developed for 386/486-based pcs.";
     // 计算到“ ”的出现，所以返回“Linux”的长度
-    printf("%d\n",strcspn(str," "));
+    printf("%d\n", strcspn(str, " "));
     // 计算到出现“/”或“-”，所以返回到“6”的长度
-    printf("%d\n",strcspn(str,"/-"));
+    printf("%d\n", strcspn(str, "/-"));
     // 计算到出现数字字符为止，所以返回“3”出现前的长度
-    printf("%d\n",strcspn(str,"1234567890"));
+    printf("%d\n", strcspn(str, "1234567890"));
 }
 
+/***
+ size_t strspn(const char* s, const char* accept);
+ 返回字符串中连续不含指定字符串内容的字符数
+ strspn()从参数s字符串的开头计算连续的字符，而这些字符
+ 都完全是accept所指字符串的字符。简单的说，若strspn()
+ 返回的数值为n，则代表字符串s开头连续有n个字符都是
+ 属于字符串accept内的字符。
+ 返回字符串s开头连续包含字符串accept内的字符数目。
+ */
+void wd_strspn(void)
+{
+    char* str = "Linux was first developed for 386/486-based PCs";
+    char* t1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // 计算大小写字母。不包含“ ”，所以返回Linux的长度。
+    printf("%d\n", strspn(str, t1));
+}
 
+/***
+ char* strdup(const char* s);
+ 复制字符串
+ strdup()会先用maolloc()配置与参数s字符串相同的空间大小，
+ 然后将参数s字符串的内容复制到该内存地址，然后把该地址返回。
+ 该地址最后可以利用free()来释放。
+ 返回一字符串指针，该指针指向复制后的新字符串地址。
+ 若返回NULL表示内存不足。
+ */
+void wd_strdup(void)
+{
+    char a[] = "strdup";
+    char* b;
+    b = strdup(a);
+    printf("b[] = \"%s\"\n", b);
+}
+
+/***
+ size_t strlen(const char* s);
+ 返回字符串长度
+ strlen()用来计算指定的字符串s的长度，不包括结束字符“\0”。
+ */
+void wd_strlen(void)
+{
+    char* str = "wd_strlen";
+    printf("str lenthg = %d\n", strlen(str));
+}
+
+/***
+ char* strpbrk(const char* s, const char* accept);
+ 查找字符串中第一个出现的指定字符
+ strpbrk()用来找出参数s字符串中最先出现在参数accept
+ 字符串中的任意字符。
+ 如果找到指定的字符则返回该字符所在地址，否则返回0。
+ */
+void wd_strpbrk(void)
+{
+    char* s = "0123456789012345678901234567890";
+    char* p;
+    // 1会最先在s字符串中找到
+    p = strpbrk(s, "a1 839");
+    printf("%s\n", p);
+    // 3会最先在s字符串中找到
+    p = strpbrk(s, "4398");
+    printf("%s\n", p);
+}
 
 
 
