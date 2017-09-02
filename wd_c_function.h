@@ -43,15 +43,23 @@ void wd_settimeofday(void);
 
 void wd_bcmp(void);
 void wd_memcmp(void);
+void wd_strcasecmp(void);
+void wd_strcmp(void);
+void wd_strcoll(void);
 void wd_bcopy(void);
 void wd_memcpy(void);
+void wd_strcpy(void);
+void wd_strncpy(void);
 void wd_memmove(void);
 void wd_bzero(void);
 void wd_index(void);
 void wd_rindex(void);
 void wd_memccpy(void);
 void wd_memchr(void);
+void wd_strchr(void);
 void wd_memset(void);
+void wd_strcat(void);
+void wd_strcspn(void);
 
 
 void wd_ttyname(void);

@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     printf("The run result:\n");
     printf("--------------------------------------------------------\n");
 
-    wd_rindex();
+    wd_strcspn();
 
     printf("--------------------------------------------------------\n");
     return 0;

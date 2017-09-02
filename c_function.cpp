@@ -845,6 +845,62 @@ void wd_memcmp(void)
 }
 
 /***
+ int strcasecmp(const char* s1, const char* s2);
+ 忽略大小写比较字符串
+ strcasecmp()用来比较参数s1和s2字符串，比较时会自动忽略大小写的差异。
+ 若参数s1和s2字符串相同则返回0，
+ s1长度大于s2长度则返回大于0的值，
+ s1长度小于s2长度则返回小于0的值。
+ */
+void wd_strcasecmp(void)
+{
+    char* a = "aBcDeF";
+    char* b = "AbCdEf";
+
+    if (!strcasecmp(a, b))
+    {
+        printf("%s = %s\n", a, b);
+    }
+}
+
+/***
+ int strcmp(const char* s1, const char* s2);
+ 比较字符串
+ strcmp()用来比较参数s1和s2字符串。
+ 字符串大小的比较是以ASCII码表上的顺序来决定，此顺序亦为字符的值。
+ strcmp()首先将s1第一个字符值减去s2第一个字符值，若差值为0则再继续
+ 比较下个字符，若差值不为0则将差值返回。
+ 若参数s1和s2字符串相同则返回0，
+ s1大于s2则返回大于0的值，
+ s1小于s2则返回小于0的值。
+ */
+void wd_strcmp(void)
+{
+    char* a = "aBcDeF";
+    char* b = "AbCdEf";
+    char* c = "aacdef";
+    char* d = "aCdEdf";
+    printf("strcmp(a,b): %d\n", strcmp(a, b));
+    printf("strcmp(a,c): %d\n", strcmp(a, c));
+    printf("strcmp(a,d): %d\n", strcmp(a, d));
+}
+
+/***
+ int strcoll(const char* s1, const char* s2);
+ 采用目前区域的字符排列次序来比较字符串
+ strcoll()会依环境变量LC_COLLATE所指定的文字排列
+ 次序来比较s1和s2字符串。
+ 若参数s1和s2字符串相同则返回0，
+ s1大于s2则返回大于0的值，
+ s1小于s2则返回小于0的值。
+ 若LC_COLLATE为“POSIX”或“C”，
+ 则strcoll()与strcmp()作用完全相同。
+ */
+void wd_strcoll(void)
+{
+}
+
+/***
  void bcopy(const void* src, void* dest, int n);
  拷贝内存内容
  bcopy()与memcpy()一样都是用来拷贝src所指的内存内容
@@ -916,6 +972,37 @@ void wd_memcpy(void)
     }
 
     printf("\n");
+}
+
+/***
+ char* strcpy(char* dest, const char* src);
+ 拷贝字符串
+ strcpy()会将参数src字符串拷贝至参数dest所指的地址。
+ 返回参数dest的字符串起始地址。
+ 如果参数dest所指的内存空间不够大，可能会造成缓冲
+ 溢出(buffer Overflow)的错误情况，在编写程序时请特别留意，
+ 或者用strncpy()来取代。
+ */
+void wd_strcpy(void)
+{
+    char a[30] = "string(1)";
+    char b[] = "string(2)string(3)";
+    printf("before strcpy(): %s\n", a);
+    printf("after strcpy(): %s\n", strcpy(a, b));
+}
+
+/***
+ char* strncpy(char* dest, const char* src, size_t n);
+ 拷贝字符串
+ strncpy()会将参数src字符串拷贝前n个字符至参数dest所指的地址。
+ 返回参数dest的字符串起始地址。
+ */
+void wd_strncpy(void)
+{
+    char a[30] = "string(1)";
+    char b[] = "string(2)string (3)";
+    printf("before strncpy(): %s\n", a);
+    printf("after strncpy(): %s\n", strncpy(a, b, sizeof(b)));
 }
 
 /***
@@ -1016,6 +1103,21 @@ void wd_memchr(void)
 }
 
 /***
+ char* strchr(const char* s, int c);
+ 查找字符串中第一个出现的指定字符串
+ strchr()用来找出参数s字符串中第一个出现的参数c地址，
+ 然后将该字符出现的地址返回。
+ 如果找到指定的字符则返回该字符所在地址，否则返回0。
+ */
+void wd_strchr(void)
+{
+    char* s = "0123456789012345678901234567890";
+    char* p;
+    p = strchr(s, '5');
+    printf("%s\n", p);
+}
+
+/***
  void* memset(void* s, int c, size_t n);
  将一段内存空间填入某值
  memset()会将参数s所指的内存区域前n个字节以参数c填入，
@@ -1031,6 +1133,65 @@ void wd_memset(void)
     memset(s, 'A', sizeof(s));
     s[30] = '\0';
     printf("%s\n", s);
+}
+
+/***
+ 1.磁盘达到85%时发送报警邮件
+ 2.发送邮件命令格式
+ 3.多个报警设置
+ 4.把分区的信息写入文件
+ The /dev/svda1 has been used for more than 51%, please check.
+ cat >email.txt <<EOF
+ ------------------------------
+ ------------------------------
+ EOF
+ echo -e "\033[32mI am testing.\033[0m" mail -s "good" weidi5858258@sina.com <email.txt
+ echo -e "\033[32mI am testing.\033[0m" mail -s "good" weidi5858258@sina.com <ps.sh
+
+ from_name="from@yanggang"
+ from="yanggang@fruitsmobile.com"
+ to="yanggang_2050@163.com"
+
+ email_title="Test Mail"
+ email_content="/home/barry/top800/test/output_email.html"
+ email_subject="Top800_Games_Free_USA"
+
+ echo -e "To: \"${email_title}\" <${to}>\nFrom: \"${from_name}\" <${from}>\nSubject: ${email_subject}\n\n`cat ${email_content}`" | /usr/sbin/sendmail -t
+ */
+
+/***
+ char* strcat(char* dest, const char* src);
+ 连接两个字符串
+ strcat()会将参数src字符串拷贝到参数dest所指的字符串末尾。
+ 第一个参数dest要有足够的空间来容纳要拷贝的字符串。
+ 返回参数dest的字符串起始地址。
+ */
+void wd_strcat(void)
+{
+    char a[30] = "string(1)";;
+    char b[] = "string(2)";
+    printf("before strcat(): %s\n", a);
+    printf("after strcat(): %s\n", strcat(a, b));
+}
+
+/***
+ size_t strcspn(const char* s, const char* reject);
+ 返回字符串中连续不含指定字符串内容的字符数
+ strcspn()从参数s字符串的开关计算连续的字符，而这些字符
+ 都完全不丰参数reject所指的字符串中。简单地说，若strcspn()
+ 返回的数值为n，则代表字符串s开头连续有n个字符都不含字符串
+ reject内的字符。
+ 返回字符串s开头连续不含字符串reject内的字符数目。
+ */
+void wd_strcspn(void)
+{
+    char* str="Linux was first developed for 386/486-based pcs.";
+    // 计算到“ ”的出现，所以返回“Linux”的长度
+    printf("%d\n",strcspn(str," "));
+    // 计算到出现“/”或“-”，所以返回到“6”的长度
+    printf("%d\n",strcspn(str,"/-"));
+    // 计算到出现数字字符为止，所以返回“3”出现前的长度
+    printf("%d\n",strcspn(str,"1234567890"));
 }
 
 
