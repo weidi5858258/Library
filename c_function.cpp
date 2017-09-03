@@ -1588,7 +1588,660 @@ void wd_getuid(void)
     printf("uid is %d\n", getuid());
 }
 
+/***
+ struct group* getgrent(void);
+ 从组文件中取得账号的数据
+ getgrent()用来从组文件（/etc/group）中读取一项数据，该数据以
+ group结构返回。第一次调用时会取得第一项组数据，之后每调用一次
+ 就会返回下一项数据，直到已无任何数据时返回NULL。
+ struct group{
+    // 组名称
+    char* gr_name;
+    // 组密码
+    char* gr_passwd;
+    // 组识别码
+    gid_t gr_gid;
+    // 组成员账号
+    char** gr_mem;
+ }
+ 返回group结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ getgrent()在第一次调用时会打开组文件，读取数据完毕后可使用
+ endgrent()来关闭该组文件。
+ ENOMEM内存不足，无法配置group结构。
+ */
+void wd_getgrent(void)
+{
+    struct group* data;
+    int i;
 
+    while ((data = getgrent()) != 0)
+    {
+        i = 0;
+        printf("%s:%s:%d:",
+               data->gr_name, data->gr_passwd, data->gr_gid);
+
+        while (data->gr_mem[i])
+        {
+            printf("%s,", data->gr_mem[i++]);
+        }
+
+        printf("\n");
+    }
+}
+
+/***
+ struct group* getgrgid(gid_t gid);
+ 从组文件中取得指定gid的数据
+ getgrgid()用来依参数gid指定的组识别码逐一搜索组文件，
+ 找到时便将该组的数据以group结构返回。
+ 返回group结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ */
+void wd_getgrgid(void)
+{
+    struct group* data;
+    int i = 0;
+    data = getgrgid(3);
+    printf("%s:%s:%d:",
+           data->gr_name, data->gr_passwd, data->gr_gid);
+
+    while (data->gr_mem[i])
+    {
+        printf("%s,", data->gr_mem[i++]);
+    }
+
+    printf("\n");
+}
+
+/***
+ struct group* getgrnam(const char* name);
+ 从组文件中取得指定组的数据
+ getgrnam()用来逐一搜索参数name指定的组名称，
+ 找到时便将该组的数据以group结构返回。
+ 返回group结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ */
+void wd_getgrnam(void)
+{
+    struct group* data;
+    int i = 0;
+    data = getgrnam("adm");
+    printf("%s:%s:%d:",
+           data->gr_name, data->gr_passwd, data->gr_gid);
+
+    while (data->gr_mem[i])
+    {
+        printf("%s,", data->gr_mem[i++]);
+    }
+
+    printf("\n");
+}
+
+/***
+ int getgroups(int size, gid_t list[]);
+ 取得组代码
+ getgroups()用来取得目前用户所属的组代码。参数size为list()
+ 所能容纳的gid_t数目。如果参数size值为零，此函数仅会返回
+ 用户所属的组数。
+ 返回组识别码，如有错误则返回-1。
+ EFAULT参数list数组地址不合法。
+ EINVAL参数size值不足以容纳所有的组。
+ */
+void wd_getgroups(void)
+{
+    gid_t list[500];
+    int x, i;
+    x = getgroups(0, list);
+    printf("%d\n", x);
+    x = getgroups(x, list);
+    printf("%d\n", x);
+
+    for (i = 0; i < x; ++i)
+    {
+        printf("%d:%d\n", i, list[i]);
+    }
+}
+
+/***
+ int getpw(uid_t uid, char* buf);
+ 取得指定用户的密码文件数据
+ getpw()会从/etc/passwd中查找符合参数uid所指定的用户账号数据，
+ 找不到相关数据就返回-1。所返回的buf字符串格式如下：
+ 账号：密码：用户识别码(uid)：组识别码(gid)：全名：根目录：shell
+ 返回0表示成功，有错误发生时返回-1。
+ 1.getpw()会有潜在的安全性问题，请尽量使用别的函数取代。
+ 2.使用shadow的系统已把用户密码抽出/etc/passwd，因此
+ 使用getpw()取得的密码将为“x”。
+ */
+void wd_getpw(void)
+{
+    char buffer[80];
+    getpw(0, buffer);
+    // root:x:0:0:root:/root:/bin/bash
+    printf("%s\n", buffer);
+}
+
+/***
+ struct passwd* getpwent(void);
+ 从密码文件中取得账号的数据
+ getpwent()用来从密码文件（/etc/passwd）中读取一项用户数据，
+ 该用户的数据以passwd结构返回。第一次调用时会取得第一位用户数据，
+ 之后每调用一次就会返回下一项数据，直到已无任何数据时返回NULL。
+ passwd结构定义如下：
+ struct passwd{
+    // 用户账号
+    char* pw_name;
+    // 用户密码
+    char* pw_passwd;
+    // 用户识别码
+    uid_t pw_uid;
+    // 组识别码
+    gid_t pw_gid;
+    // 用户全名
+    char* pw_gecos;
+    // 家目录
+    char* pw_dir;
+    // 所使用的shell路径
+    char* pw_shell;
+ }
+ 返回passwd结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ getpwent()在第一次调用时会打开密码文件，读取数据完毕后可
+ 使用endpwent()来关闭该密码文件。
+ ENOMEM内存不足，无法配置passwd结构。
+ */
+void wd_getpwent(void)
+{
+    struct passwd* user;
+
+    while ((user = getpwent()) != 0)
+    {
+        printf("%s:%d:%d:%s:%s:%s\n",
+               user->pw_name, user->pw_uid, user->pw_gid,
+               user->pw_gecos, user->pw_dir, user->pw_shell);
+    }
+
+    endpwent();
+}
+
+/***
+ struct passwd* getpwnam(const char* name);
+ 从密码文件中取得指定账号的数据
+ getpwnam()用来逐一搜索参数name指定的账号名称，找到时便将该
+ 用户的数据以passwd结构返回。
+ 返回passwd结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ */
+void wd_getpwnam(void)
+{
+    struct passwd* user;
+    user = getpwnam("root");
+    printf("name: %s\n", user->pw_name);
+    printf("uid: %d\n", user->pw_uid);
+    printf("home: %s\n", user->pw_dir);
+}
+
+/***
+ struct passwd* getpwuid(uid_t uid);
+ 从密码文件中取得指定uid的数据
+ getpwuid()用来逐一搜索参数uid指定的用户识别码，找到时便将该
+ 用户的数据以passwd结构返回。
+ 返回passwd结构数据，如果返回NULL则表示已无，或有错误发生。
+ */
+void wd_getwuid(void)
+{
+    struct passwd* user;
+    user = getpwuid(6);
+    printf("name: %s\n", user->pw_name);
+    printf("uid: %d\n", user->pw_uid);
+    printf("home: %s\n", user->pw_dir);
+}
+
+/***
+ struct utmp* getutent(void);
+ 从utmp文件中取得账号登录数据
+ getutent()用来从utmp文件（/var/run/utmp）中读取一项登录数据，
+ 该数据以utmp结构返回。第一次调用时会取得第一位用户数据，
+ 之后每调用一次就会返回下一项数据，直到已无任何数据时返回NULL。
+ utmp结构定义如下：
+ struct utmp{
+    // 登录类型
+    short int ut_type;
+    // login进程的pid
+    pid_t ut_pid;
+    // 登录装置名，省略了"/dev/"
+    char ut_line[UT_LINESIZE];
+    // Inittab ID
+    char ut_id[4];
+    // 登录账号
+    char ut_user[UT_NAMESIZE];
+    // 登录账号的远程主机名称
+    char ut_host[UT_HOSTSIZE];
+    // 当类型为DEAD_PROCESS时进程的结束状态
+    struct exit_status ut_exit;
+    // Session ID
+    long int ut_session;
+    // 时间记录
+    struct timeval ut_tv;
+    // 远程主机的网络地址
+    int32_t ut_addr_v6[4];
+    // 保留未使用
+    char __unused[20];
+ }
+ ut_type有以下几种类型：
+ EMPTY          此为空的记录
+ RUN_LVL        记录系统run-level的改变
+ ROOT_TIME      记录系统开机时间
+ NEW_TIME       记录系统时间改变后的时间
+ OLD_TINE       记录当改变系统时间时的时间
+ INIT_PROCESS   记录一个由init衍生出来的进程
+ LOGIN_PROCESS  记录login进程
+ USER_PROCESS   记录一般进程
+ DEAD_PROCESS   记录结束进程
+ ACCOUNTING     目前尚未使用
+ exit_status结构定义：
+ struct exit_status{
+    // 进程结束状态
+    short int e_termination;
+    // 进程退出状态
+    short int e_exit;
+ }
+ UT_LINESIZE    32
+ UT_NAMESIZE    32
+ UT_HOSTSIZE    256
+ 返回utmp结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ getutent()在第一次调用时会打开utmp文件，读取数据
+ 完毕后可使用endutent()来关闭该utmp文件。
+ */
+void wd_getutent(void)
+{
+    struct utmp* u;
+
+    while ((u = getutent()))
+    {
+        if (u->ut_type == USER_PROCESS)
+        {
+            printf("%d %s %s %s\n",
+                   u->ut_type, u->ut_user, u->ut_line, u->ut_host);
+        }
+    }
+
+    endutent();
+}
+
+/***
+ struct utmp* getutid(struct utmp* ut);
+ 从utmp文件中查找特定的记录
+ getutid()用来从目前utmp文件的读写位置逐一往后搜索参数ut指定的
+ 记录，如果ut->ut_type为RUN_LVL,BOOT_TIME,NEW_TIME,OLD_TIMEUT
+ 其中之一则查找与ut->ut_type相符的记录；
+ 若ut->ut_type为INIT_PROCESS,LOGIN_PROCESS,USER_PROCESS或
+ DEAD_PROCESS其中之一，则查找ut->ut_id相符的记录。找到相符的
+ 记录便将该数据以utmp结构返回。
+ 返回utmp结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ */
+void wd_getutid(void)
+{
+    struct utmp ut, *u;
+    ut.ut_type = RUN_LVL;
+
+    while ((u = getutid(&ut)))
+    {
+        printf("%d %s %s %s\n",
+               u->ut_type, u->ut_user, u->ut_line, u->ut_host);
+    }
+}
+
+/***
+ struct utmp* getutline(struct utmp* ut);
+ 从utmp文件中查找特定的记录
+ getutline()用来从目前utmp文件的读写位置逐一搜索ut_type为
+ USER_PROCESS或LOGIN_PROCESS的记录，而且ut_line和ut->ut_line
+ 相符。找到相符的记录便将该数据以utmp结构返回。
+ 返回utmp结构数据，如果返回NULL则表示已无数据，或有错误发生。
+ */
+void wd_getutline(void)
+{
+    struct utmp ut, *u;
+    strcpy(ut.ut_line, "pts/l");
+
+    while ((u = getutline(&ut)))
+    {
+        printf("%d %s %s %s\n",
+               u->ut_type, u->ut_user, u->ut_line, u->ut_host);
+    }
+}
+
+/***
+ int initgroups(const char* user, gid_t group);
+ initgroups()
+ */
+void wd_initgroups(void)
+{
+    
+}
+
+/***
+ void pututline(struct utmp* ut);
+ pututline()
+ */
+void wd_pututline(void)
+{
+    
+}
+
+/***
+ int seteuid(uid_t euid);
+ seteuid()
+ */
+void wd_seteuid(void)
+{
+    
+}
+
+/***
+ int setfsgid(uid_t fsgid);
+ setfsgid()
+ */
+void wd_setfsgid(void)
+{
+    
+}
+
+/***
+ int setfsuid(uid_t fsuid);
+ setfsuid()
+ */
+void wd_setfsuid(void)
+{
+    
+}
+
+/***
+ int setgid(gid_t gid);
+ setgid()
+ */
+void wd_setgid(void)
+{
+    
+}
+
+/***
+ void setgrent(void);
+ setgrent()
+ */
+void wd_setgrent(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
+
+/***
+ 
+ */
+void wd_(void)
+{
+    
+}
 
 
 

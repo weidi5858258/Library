@@ -86,6 +86,17 @@ void wd_getegid(void);
 void wd_geteuid(void);
 void wd_getgid(void);
 void wd_getuid(void);
+void wd_getgrent(void);
+void wd_getgrgid(void);
+void wd_getgrnam(void);
+void wd_getgroups(void);
+void wd_getpw(void);
+void wd_getpwent(void);
+void wd_getpwnam(void);
+void wd_getwuid(void);
+void wd_getutent(void);
+void wd_getutid(void);
+void wd_getutline(void);
 
 
 void wd_ttyname(void);
