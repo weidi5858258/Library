@@ -67,6 +67,25 @@ void wd_strspn(void);
 void wd_strdup(void);
 void wd_strlen(void);
 void wd_strpbrk(void);
+void wd_strstr(void);
+void wd_strtok(void);
+
+void wd_abs(void);
+void wd_acos(void);
+void wd_asin(void);
+void wd_atan(void);
+void wd_atan2(void);
+void wd_ceil(void);
+
+void wd_endgrent(void);
+void wd_endpwent(void);
+void wd_endutent(void);
+void wd_fgetgrent(void);
+void wd_fgetpwent(void);
+void wd_getegid(void);
+void wd_geteuid(void);
+void wd_getgid(void);
+void wd_getuid(void);
 
 
 void wd_ttyname(void);

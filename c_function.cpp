@@ -9,6 +9,10 @@
 #include <sys/time.h>
 #include <time.h>
 #include <fcntl.h>
+#include <math.h>
+#include <grp.h>
+#include <pwd.h>
+#include <utmp.h>
 
 #include "wd_c_function.h"
 
@@ -1308,9 +1312,281 @@ void wd_strpbrk(void)
     printf("%s\n", p);
 }
 
+/***
+ char* strstr(const char* haystack, const char* needle);
+ 在一字符串中查找指定的字符串
+ strstr()会从字符串haystack中搜寻字符串needle，
+ 并将第一次出现的地址返回。
+ 返回指定字符串第一次出现的地址，否则返回0。
+ */
+void wd_strstr(void)
+{
+    char* s = "0123456789012345678901234567890";
+    char* p;
+    p = strstr(s, "902");
 
+    // 必须要这样
+    if (p == NULL)
+    {
+        return;
+    }
 
+    printf("%s\n", p);
+}
 
+/***
+ char* strtok(char* s, const char* delim);
+ 分割字符串
+ strtok()用来将字符串分割成一个个片段。参数s指向欲分割的字符串，
+ 参数delim则为分割字符串，当strtok()在参数s的字符串中发现参数
+ delim的分割字符时则会将该字符改为\0字符。在第一次调用时，
+ strtok()必需给予参数s字符串，往后的调用则将参数s设置成NULL。
+ 每次调用成功则返回下一个分割后的字符串指针。
+ 返回下一个分割后的字符串指针，如果已无从分割则返回NULL。
+ */
+void wd_strtok(void)
+{
+    char s[] = "ab-cd : ef;gh :i-jkl;;qrs-tu:vwx-y;z";
+    char* delim = "-:";
+    char* p;
+    printf("%s\n", strtok(s, delim));
+
+    while ((p = strtok(NULL, delim)))
+    {
+        printf("%s    ", p);
+    }
+
+    printf("\n");
+}
+
+/***
+ int abs(int j);
+ 计算整型数的绝对值
+ abs()用来计算参数j的绝对值，然后将结果返回。
+ */
+void wd_abs(void)
+{
+    int answer;
+    answer = abs(-12);
+    printf("|-12| = %d\n", answer);
+}
+
+/***
+ double acos(double x);
+ 取反余弦函数数值
+ acos()用来计算参数x的反余弦值，然后将结果返回。
+ 参数x范围为-1至1之间，超过此范围则会失败。
+ 返回0至PI之间的计算结果，单位为弧度，在函数中
+ 角度均以弧度来表示。
+ EDOM参数x超出范围。
+ 使用GCC编译时请加入-lm。
+ */
+void wd_acos(void)
+{
+    double angle;
+    angle = acos(0.5);
+    printf("angle = %f\n", angle);
+}
+
+/***
+ double asin(double x);
+ 取反正弦函数数值
+ asin()用来计算参数x的反正弦值，然后将结果返回。
+ 参数x范围为-1到1之间，超过此范围则会失败。
+ 返回-PI/2到PI/2之间的计算结果。
+ EDOM参数x超出范围。
+ 使用GCC编译时请加入-lm。
+ */
+void wd_asin(void)
+{
+    double angle;
+    angle = asin(0.5);
+    printf("angle = %f\n", angle);
+}
+
+/***
+ double atan(double x);
+ 取反正切函数值
+ atan()用来计算参数x的反正切值，然后将结果返回。
+ EDOM参数x超出范围。
+ 使用GCC编译时请加入-lm。
+ */
+void wd_atan(void)
+{
+    double angle;
+    angle = atan(1);
+    printf("angle = %f\n", angle);
+}
+
+/***
+ double atan2(double y, double x);
+ 取反正切函数值
+ atan2()用来计算参数y/x的反正切值，然后将结果返回。
+ EDOM参数x超出范围。
+ 使用GCC编译时请加入-lm。
+ */
+void wd_atan2(void)
+{
+    double angle;
+    angle = atan2(1, 2);
+    printf("angle = %f\n", angle);
+}
+
+/***
+ double ceil(double x);
+ 取不小于参数的最小整型数
+ ceil()会返回不小于参数x的最小整数值，结果以
+ double形式返回。
+ 返回不小于参数x的最小整数值。
+ 使用GCC编译时请加入-lm。
+ */
+void wd_ceil(void)
+{
+    double value[] = {4.8, 1.12, -2.2, 0};
+    int i;
+
+    for (i = 0; value[i] != 0; ++i)
+    {
+        printf("%f => %f\n", value[i], ceil(value[i]));
+    }
+}
+
+/***
+ void endgrent(void);
+ 关闭组文件
+ endgrent()用来关闭由getgrent()所打开的密码文件。
+ */
+void wd_endgrent(void)
+{
+}
+
+/***
+ void endpwent(void);
+ 关闭密码文件
+ endpwent()用来关闭由getpwent()所打开的密码文件。
+ */
+void wd_endpwent(void)
+{
+}
+
+/***
+ void endutent(void);
+ 关闭utmp文件
+ endutent()用来关闭由getutent()所打开的utmp文件。
+ */
+void wd_endutent(void)
+{
+}
+
+/***
+ struct group* fgetgrent(FILE* stream);
+ 从指定的文件读取组格式
+ fgetgrent()会从参数stream指定的文件读取一行数据，
+ 然后以group结构将该数据返回。参数stream所指定的
+ 文件必须和/etc/group相同的格式。
+ 返回group结构数据，如果返回NULL则表示已无数据，
+ 或有错误发生。
+ */
+void wd_fgetgrent(void)
+{
+    struct group* data;
+    FILE* stream;
+    int i;
+    stream = fopen("/etc/group", "r");
+
+    while ((data = fgetgrent(stream)) != 0)
+    {
+        i = 0;
+        printf("%s:%s:%d:",
+               data->gr_name, data->gr_passwd, data->gr_gid);
+
+        while (data->gr_mem[i])
+        {
+            printf("%s,", data->gr_mem[i++]);
+        }
+
+        printf("\n");
+    }
+
+    fclose(stream);
+}
+
+/***
+ struct passwd* fgetpwent(FILE* stream);
+ 从指定的文件读取密码格式
+ fgetpwent()会从参数stream指定的文件读取一行数据，
+ 然后以passwd结构将该数据返回。参数stream所指定的
+ 文件必须和/etc/passwd相同的格式。
+ 返回passwd结构数据，如果返回NULL则表示已无数据，
+ 或有错误发生。
+ */
+void wd_fgetpwent(void)
+{
+    struct passwd* user;
+    FILE* stream;
+    stream = fopen("/etc/passwd", "r");
+
+    while ((user = fgetpwent(stream)) != 0)
+    {
+        printf("%s:%d:%d:%s:%s:%s\n",
+               user->pw_name, user->pw_uid, user->pw_gid,
+               user->pw_gecos, user->pw_dir, user->pw_shell);
+    }
+}
+
+/***
+ gid_t getegid(void);
+ 取得有效的组识别码
+ getegid()用来取得执行目前进程有效组识别码。
+ 有效的组识别码用来决定进程执行时组的权限。
+ 返回有效和组识别码。
+ */
+void wd_getegid(void)
+{
+    // 0 当使用root身份执行程序时
+    printf("egid is %d\n", getegid());
+}
+
+/***
+ uid_t geteuid(void);
+ 取得有效的用户识别码
+ geteuid()用来取得执行目前进程有效的用户识别码。
+ 有效的用户识别码用来决定进程执行的权限，
+ 借由此改变此值，进程可以获得额外的权限。
+ 倘若执行文件的setID位已被设置，该文件执行时，
+ 其进程的euid值便会设成该文件所有都的uid。
+ 例如，执行文件/usr/bin/passwd的权限为
+ -r-s--x--x，其s位即为setID(SUID)位，
+ 而当任何用户在执行passwd时其有效的用户识别码会被
+ 设成passwd所有者的uid值，即root的uid值(0)。
+ */
+void wd_geteuid(void)
+{
+    // 0 当使用root身份执行程序时
+    printf("euid is %d\n", geteuid());
+}
+
+/***
+ gid_t getgid(void);
+ 取得真实的组识别码
+ getgid()用来取得执行目前进程的组识别码。
+ */
+void wd_getgid(void)
+{
+    // 0 当使用root身份执行程序时
+    printf("gid is %d\n", getgid());
+}
+
+/***
+ uid_t getuid(void);
+ 取得真实的用户识别码
+ getuid()用来取得执行目前进程的用户识别码。
+ */
+void wd_getuid(void)
+{
+    // 0 当使用root身份执行程序时
+    printf("uid is %d\n", getuid());
+}
 
 
 
