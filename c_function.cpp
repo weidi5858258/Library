@@ -1972,73 +1972,90 @@ void wd_setgrent(void)
 }
 
 /***
- 
+ int setgroups(size_t size, const gid_t* list);
+ setgroups()
+ EFAULT
+ EPERM
+ EINVAL
  */
-void wd_(void)
+void wd_setgroups(void)
 {
     
 }
 
 /***
- 
+ void setpwent(void);
+ setpwent()
  */
-void wd_(void)
+void wd_setpwent(void)
 {
     
 }
 
 /***
- 
+ int setregid(gid_t rgid, gid_t egid);
+ setregid()
  */
-void wd_(void)
+void wd_setregid(void)
 {
     
 }
 
 /***
- 
+ int setreuid(uid_t ruid, uid_t euid);
+ setreuid()
  */
-void wd_(void)
+void wd_setreuid(void)
 {
     
 }
 
 /***
- 
+ int setuid(uid_t uid);
+ setuid()
  */
-void wd_(void)
+void wd_setuid(void)
 {
     
 }
 
 /***
- 
+ void setutent(void);
+ setutent()
  */
-void wd_(void)
+void wd_setutent(void)
 {
     
 }
 
 /***
- 
+ void utmpname(const char* file);
+ utmpname()
  */
-void wd_(void)
+void wd_utmpname(void)
 {
     
 }
 
 /***
- 
+ char* crypt(const char* key, const char* salt);
+ crypt()
  */
-void wd_(void)
+void wd_crypt(void)
 {
     
 }
 
 /***
- 
+ void* bsearch(
+ const void* key, 
+ const void* base, 
+ size_t nmemb,
+ size_t size,
+ int(*compar)(const void*, const void*));
+ bsearch()
  */
-void wd_(void)
+void wd_bsearch(void)
 {
     
 }
