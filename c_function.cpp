@@ -1914,7 +1914,6 @@ void wd_getutline(void)
  */
 void wd_initgroups(void)
 {
-    
 }
 
 /***
@@ -1923,7 +1922,6 @@ void wd_initgroups(void)
  */
 void wd_pututline(void)
 {
-    
 }
 
 /***
@@ -1932,7 +1930,6 @@ void wd_pututline(void)
  */
 void wd_seteuid(void)
 {
-    
 }
 
 /***
@@ -1941,7 +1938,6 @@ void wd_seteuid(void)
  */
 void wd_setfsgid(void)
 {
-    
 }
 
 /***
@@ -1950,7 +1946,6 @@ void wd_setfsgid(void)
  */
 void wd_setfsuid(void)
 {
-    
 }
 
 /***
@@ -1959,7 +1954,6 @@ void wd_setfsuid(void)
  */
 void wd_setgid(void)
 {
-    
 }
 
 /***
@@ -1968,7 +1962,6 @@ void wd_setgid(void)
  */
 void wd_setgrent(void)
 {
-    
 }
 
 /***
@@ -1980,7 +1973,6 @@ void wd_setgrent(void)
  */
 void wd_setgroups(void)
 {
-    
 }
 
 /***
@@ -1989,7 +1981,6 @@ void wd_setgroups(void)
  */
 void wd_setpwent(void)
 {
-    
 }
 
 /***
@@ -1998,7 +1989,6 @@ void wd_setpwent(void)
  */
 void wd_setregid(void)
 {
-    
 }
 
 /***
@@ -2007,7 +1997,6 @@ void wd_setregid(void)
  */
 void wd_setreuid(void)
 {
-    
 }
 
 /***
@@ -2016,7 +2005,6 @@ void wd_setreuid(void)
  */
 void wd_setuid(void)
 {
-    
 }
 
 /***
@@ -2025,7 +2013,6 @@ void wd_setuid(void)
  */
 void wd_setutent(void)
 {
-    
 }
 
 /***
@@ -2034,7 +2021,6 @@ void wd_setutent(void)
  */
 void wd_utmpname(void)
 {
-    
 }
 
 /***
@@ -2043,13 +2029,12 @@ void wd_utmpname(void)
  */
 void wd_crypt(void)
 {
-    
 }
 
 /***
  void* bsearch(
- const void* key, 
- const void* base, 
+ const void* key,
+ const void* base,
  size_t nmemb,
  size_t size,
  int(*compar)(const void*, const void*));
@@ -2058,13 +2043,12 @@ void wd_crypt(void)
  */
 void wd_bsearch(void)
 {
-    
 }
 
 /***
  void* lfind(
  const void* key,
- const void* base, 
+ const void* base,
  size_t* nmemb,
  size_t size,
  int(*compar)(const void*, const void*));
@@ -2073,7 +2057,6 @@ void wd_bsearch(void)
  */
 void wd_lfind(void)
 {
-    
 }
 
 /***
@@ -2088,12 +2071,11 @@ void wd_lfind(void)
  */
 void wd_lsearch(void)
 {
-    
 }
 
 /***
  void qsort(
- void* base, 
+ void* base,
  size_t nmemb,
  size_t size,
  int(*compar)(const void*, const void*));
@@ -2102,183 +2084,346 @@ void wd_lsearch(void)
  */
 void wd_qsort(void)
 {
-    
 }
 
 /***
+ int rand(void);
+ rand()
+ */
+void wd_rand(void)
+{
+    int i, j;
+
+    for (i = 0; i < 10; ++i)
+    {
+        j = 1 + (int)(10.0 * rand() / (RAND_MAX + 1.0));
+        printf("%d\n", j);
+    }
+}
+
+/***
+ void srand(unsigned int seed);
+ srand()
+ */
+void wd_srand(void)
+{
+    int i, j;
+    srand((int)time(0));
+
+    for (i = 0; i < 10; ++i)
+    {
+        j = 1 + (int)(10.0 * rand() / (RAND_MAX + 1.0));
+        printf("%d\n", j);
+    }
+}
+
+/***
+ int close(int fd);
+ 关闭文件
+ 当使用完文件后若不再需要则可使用close()关闭该文件，close()会让
+ 数据写回磁盘，并释放该文件所占用的资源。参数fd为先前由open()
+ 或create()所返回的文件描述符。
+ 若文件顺利关闭则返回0，发生错误则返回-1.
+ EBADF参数fd非有效的文件描述符或该文件已关闭。
+ 虽然在进程结束时，系统会自动关闭已打开的文件，但仍建议自行
+ 关闭文件，并确实检查返回值。
+ */
+void wd_close(void)
+{
+}
+
+/***
+ int create(const char* pathname, mode_t mode);
+ 建立文件
+ 参数pathname指向欲建立的文件路径字符串。create()相当于使用下列
+ 的调用方式调用open():
+ open(const char* pathname,(O_CREAT|O_WRONLY|O_TRUNC));
+ 关于参数mode请参考open()函数：
+ create()会返回新的文件描述符，若有错误发生则返回-1，并把错误
+ 代码设给errno。
+ EEXIST         参数pathname所指的文件已存在
+ EACCESS        参数pathname所指定的文件不符合要求测试的权限
+ EROFS          欲打开写入权限的文件存在于只读文件系统内
+ EFAULT         参数pathname指针超出可存取的内存空间
+ EINVAL         参数mode不正确
+ ENAMETOOLONG   参数pathname太长
+ ENOTDIR        参数pathname为一目录
+ ENOMEM         核心内存不足
+ ELOOP          参数pathname有过多符号连接问题
+ EMFILE         已达到进程可同时打开的文件数上限
+ ENFILE         已达到系统可同时打开的文件数上限
+ create()无法建立特别的装置文件，如果需要请使用mknod()。
+ 请参考open()。
+ */
+void wd_create(void)
+{
+}
+
+/***
+ int dup(int oldfd);
+ 复制文件描述符
+ dup()用来复制参数oldfd所指的文件描述符，并将它返回。此新的文件
+ 描述符和参数oldfd指的是同一个文件，共享所有的锁定、读写位置和
+ 各项权限或旗杆。例如，当利用lseek()对某个文件描述符作用时，另
+ 一个文件描述符的读写位置也会随着改变。不过，文件描述符之间不共享
+ close-on-exec旗杆。
+ 当复制成功时，则返回最小及尚未使用的文件描述符。若有错误发生则
+ 返回-1，errno也会存放错误代码。
+ EBADF参数fd非有效的文件描述符，或该文件已关闭。
+ */
+void wd_dup(void)
+{
+}
+
+/***
+ int dup2(int oldfd, int newfd);
+ 复制文件描述符
+ dup2()用来复制参数oldfd所指的文件描述符，并将它拷贝至参数newfd后
+ 一块返回。若参数newfd为一已打开的文件描述符，则newfd所指的文件
+ 会被关闭。dup2()所复制的文件描述符，与原来的文件描述符共享各种
+ 文件状态，详情可参考dup()。当复制成功时，则返回最小及尚未使用的
+ 文件描述符。若有错误则返回-1，errno也会存放错误代码。
+ dup2()相当于调用fcntl(oldfd, F_DUPFD, newfd);请参考fcntl()。
+ EBADF参数fd非有效的文件描述符，或该文件已关闭。
+ */
+void wd_dup2(void)
+{
+}
+
+/***
+ int fcntl(int fd, int cmd);
+ int fcntl(int fd, int cmd, long arg);
+ int fcntl(int fd, int cmd, struct flock* lock);
+ 文件描述符操作
+ fcntl()用来操作文件描述符的一些特性。参数fd代表欲设置的文件描述符，参数
+ cmd代表欲操作的指令，有以下几种情况：
+ F_DUPFD  用来查找大于或等于参数arg的最小且仍未使用的文件描述符，
+ 并且复制参数fd的文件描述符。执行成功则返回新复制的文件描述符。
+ F_GETFD  取得close-on-exec旗杆。若此旗杆的FD_CLOEXEC位为0，代表
+ 在调用exec()相关函数时文件将不会关闭。
+ F_SETFD  设置close-on-exec旗杆。该旗杆以参数arg的FD_CLOEXEC位
+ 决定。
+ F_GETFL  取得文件描述符状态旗杆，此旗杆为open()的参数flags。
+ F_SETFL  设置文件描述符状态旗杆，参数arg为新旗杆，但只允许
+ O_APPEND、O_NONBLOCK和O_ASYNC位的改变，其他位的改变将不受影响。
+ F_GETLK  取得文件锁定的状态。
+ F_SETLK  设置文件锁定的状态。此时flcok结构的l_type值必须是
+ F_RDLCK、F_WRLCK或F_UNLCK。如果无法建立锁定，则返回-1，错误代码
+ 为EACCES或EAGAIN。
+ F_SETLKW F_SETLK作用相同，但是无法建立锁定时，此调用会一直等到锁定动作
+ 成功为止。若在等待锁定的过程中被信号中断时，会立即返回-1，错误
+ 代码为EINTR。参数lock指针为flock结构指针，定义如下：
+ struct flcok{
+    // 锁定的状态
+    short int l_type;
+    // 决定l_start位置
+    short int l_whence;
+    // 锁定区域的开头位置
+    off_t l_start;
+    // 锁定区域的大小
+    off_t l_len;
+    // 锁定动作的进程
+    pid_t l_pid;
+ };
+ l_type有三种状态：
+ F_RDLCK 建立一个供读取用的锁定
+ F_WRLCK 建立一个供写入用的锁定
+ F_UNLCK 删除之前建立的锁定
+ l_whence也有三种状态：
+ SEEK_SET 以文件开头为锁定的起始益
+ SEET_CUR 以目前文件读写位置为锁定的起始位置
+ SEEK_END 以文件结尾为锁定的起始位置
+ 成功则返回0，若有错误则返回-1，错误原因在于errno。
+ */
+void wd_fcntl(void)
+{
+}
+
+/***
+ int flock(int fd, int operation);
+ 锁定文件或解除锁定
+ flock()会依参数operation所指定的方式对参数fd所指的文件做各种
+ 锁定或解除锁定的动作。此函数只能锁定整个文件，无法锁定文件的
+ 某一区域。
+ 参数operation有下列四种情况：
+ LOCK_SH 建立共享锁定。多个进程可同时对同一文件作共享锁定。
+ LOCK_EX 建立互斥锁定。一个文件同时只有一个互斥锁定。
+ LOCK_UN 文件锁定状态。
+ LOCK_NB 无法建立锁定时，此操作可不被阻断，马上返回进程。通常与
+ LOCK_SH或LOCK_EX做OR(|)组合。
+ 单一文件无法同时建立共享锁定和互斥锁定，而当使用dup()或fork()
+ 时文件描述符不会继承此种锁定。
+ 返回0表示成功，若有错误则返回-1，错误代码在于errno。
+ */
+void wd_flock(void)
+{
+}
+
+/***
+ int fsync(int fd);
+ 将缓冲区数据写回磁盘
+ fsync()负责将参数fd所指的文件数据，由系统缓冲区写磁盘，以确保
+ 数据同步。
+ 成功则返回0，失败则返回-1，errno为错误代码。
+ */
+void wd_fsync(void)
+{
+}
+
+/***
+ off_t lseek(int fildes, off_t offset, int whence);
+ 移动文件的读写位置
+ 每一个已打开的文件都有一个读写位置，当打开文件时通常其读写
+ 位置是指向文件开头，若是以附加的方式打开文件（如O_APPEND），
+ 则读写位置会指向文件尾。当read()或write()时，读写位置会随之
+ 增加，lseek()便是用来控制该文件的读写位置。参数fildes为已打开的
+ 文件描述符，参数offset为根据参数whence来移动读写位置的位数。
+ 参数whence为下列其中一种：
+ SEEK_SET 参数offset即为新的读写位置。
+ SEEK_CUR 以目前的读写位置往后增加offset个位移量。
+ SEEK_END 将读写位置指向文件尾后再增加offset个位移量。
+ 当whence值为SEEK_CUR或SEEK_END时，参数允许负值的出现。
+ 下列是特别的使用方式：
+ 1）欲将读写位置移到文件开头时：lseek(int fildes, 0 ,SEEK_SET);
+ 2）欲将读写位置移到文件尾部时：lseek(int fildes, 0, SEEK_END);
+ 3）想要取得目前文件位置时：lseek(int fildes, 0, SEEK_CUR);
+ 当调用成功时则返回目前的读写位置，也就是距离文件开头多少个
+ 字节。若有错误则返回-1，errno也会存放错误代码。
+ Linux系统不允许lseek()对tty装置作用，此项动作会令lseek()
+ 返回ESPIPE。
+ */
+void wd_lseek(void)
+{
+}
+
+/***
+ int mkstemp(char* template);
+ 建立唯一的临时文件
+ mkstemp()用来建立唯一的临时文件。参数template所指的文件名称
+ 字符串中最后六个字符必须是XXXXXX。mkstemp()会以可读写模式和
+ 0600权限来打开该文件，如果该文件不存在则会建立该文件。打开该
+ 文件后其文件描述符会回返回。文件顺利打开后返回可读写的文件
+ 描述符。如果文件打开失败则返回NULL，并把错误代码存在errno中。
+ EINVAL参数template字符串最后六个字符非XXXXXX。
+ EEXIST无法建立临时文件。
+ 参数template所指的文件名称字符串必须声明为数组，如：
+ char template[] = "template-XXXXXX";
+ 千万不可以使用下列的表达式：
+ char* template = "template-XXXXXX";
+ */
+void wd_mkstemp(void)
+{
+    int fd;
+    char template[] = "template-XXXXXX";
+    fd = mkstemp(template);
+    printf("template = %s\n", template);
+    close(fd);
+}
+
+/***
+ int open(const char* pathname, int flags);
+ int open(const char* pathname, int flags, mode_t mode);
+ 参数pathname指向欲打开的文件路径字符串。下列是参数flags
+ 所能使用的旗杆：
+ O_RDONLY 以只读方式打开文件
+ O_WRONLY 以只写方式打开文件
+ O_RDWR   以可读写文件打开文件。
+ 上述三种旗杆是互斥的，也就是不可同时使用，但可与下列的旗杆利用
+ OR(|)运算符组合。
+ O_CREAT  若欲打开的文件不存在则自动建立该文件。
+ O_EXCL   如果O_CREAT也被设置，此指令会去检查文件是否存在。文件
+ 若不存在则建立该文件，否则将导致打开文件错误。此外，若O_CREAT与
+ O_EXCL同时设置，并且欲打开的文件为符号连接，则会打开文件失败。
+ O_NOCTTY 如果欲打开的文件为终端机设备时，则不会将该终端机当成
+ 进程控制终端机。
+ O_TRUNC  若文件存在并且以可写的方式打开时，此旗杆会令文件长度
+ 清为0，而原来在于该文件的资料也会消失。
+ O_APPEND 当读写文件时会从文件尾打开文件，也就是所写入的数据会以
+ 附加的方式加入到文件末尾。
+ O_NONBLOCK以不可阻断的方式打开文件，也就是无论有无数据读取或
+ 等待，都会立即返回进程之中。
+ O_NDELAY 同O_NONBLOCK
+ O_SYNC   以同步的方式打开文件。
+ O_NOFOLLOW如果参数pathname所指的文件为一符号连接，则会令打开
+ 文件失败。
+ O_DIRECTORY如果参数pathname所指的文件不是目录，则会令打开失败。
+ 此为Linux2.2以后特有的旗杆，以避免一些系统安全问题。参数mode则
+ 有下列数种组合，只有在建立新文件时才会生效，此外真正建文件时的
+ 权限会受到umask值的影响，因此该文件权限为（mode-umask）。
  
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
+
  */
 void wd_(void)
 {
-    
 }
 
 /***
- 
- */
-void wd_(void)
-{
-    
-}
 
-/***
- 
  */
 void wd_(void)
 {
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
-}
-
-/***
- 
- */
-void wd_(void)
-{
-    
 }
 
 

@@ -98,6 +98,8 @@ void wd_getutent(void);
 void wd_getutid(void);
 void wd_getutline(void);
 
+void wd_mkstemp(void);
+
 
 void wd_ttyname(void);
 

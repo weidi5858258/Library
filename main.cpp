@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     printf("The run result:\n");
     printf("---------------------------------------------------\n");
 
-    wd_getutline();
+    wd_mkstemp();
 
     printf("---------------------------------------------------\n");
     return 0;
