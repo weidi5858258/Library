@@ -2053,6 +2053,7 @@ void wd_crypt(void)
  size_t nmemb,
  size_t size,
  int(*compar)(const void*, const void*));
+
  bsearch()
  */
 void wd_bsearch(void)
@@ -2061,25 +2062,45 @@ void wd_bsearch(void)
 }
 
 /***
- 
+ void* lfind(
+ const void* key,
+ const void* base, 
+ size_t* nmemb,
+ size_t size,
+ int(*compar)(const void*, const void*));
+
+ lfind()
  */
-void wd_(void)
+void wd_lfind(void)
 {
     
 }
 
 /***
- 
+ void* lsearch(
+ const void* key,
+ const void* base,
+ size_t* nmemb,
+ size_t size,
+ int(*compar)(const void*, const void*));
+
+ lsearch()
  */
-void wd_(void)
+void wd_lsearch(void)
 {
     
 }
 
 /***
- 
+ void qsort(
+ void* base, 
+ size_t nmemb,
+ size_t size,
+ int(*compar)(const void*, const void*));
+
+
  */
-void wd_(void)
+void wd_qsort(void)
 {
     
 }
