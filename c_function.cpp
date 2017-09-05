@@ -2313,11 +2313,11 @@ void wd_lseek(void)
  */
 void wd_mkstemp(void)
 {
-    int fd;
-    char template[] = "template-XXXXXX";
-    fd = mkstemp(template);
-    printf("template = %s\n", template);
-    close(fd);
+    // int fd;
+    // char template[] = "template-XXXXXX";
+    // fd = mkstemp(template);
+    // printf("template = %s\n", template);
+    // close(fd);
 }
 
 /***
@@ -2350,80 +2350,181 @@ void wd_mkstemp(void)
  此为Linux2.2以后特有的旗杆，以避免一些系统安全问题。参数mode则
  有下列数种组合，只有在建立新文件时才会生效，此外真正建文件时的
  权限会受到umask值的影响，因此该文件权限为（mode-umask）。
- 
+ S_IRWXU 00700权限，代表该文件所有者具有可读、可写及可执行的权限。
+ S_IRUSR 或S_IREAD，00400权限，代表该文件所有者具有可读取的权限。
+ S_IWUSR 或S_IWRITE，00200权限，代表该文件所有者具有可写入的权限。
+ S_IXUSR 或S_IEXEC，00100权限，代表该文件所有者具有可执行的权限。
+ S_IRWXG 00070权限，代表该文件用户组具有可读、可写及可执行的权限。
+ S_IRGRP 00040权限，代表该文件用户组具有可读取的权限。
+ S_IWGRP 00020权限，代表该文件用户组具有可写入的权限。
+ S_IXGRP 00010权限，代表该文件用户组具有可执行的权限。
+ S_IRWXO 00007权限，代表其他用户具有可读、可写及可执行的权限。
+ S_IROTH 00004权限，代表其他用户具有可读取的权限。
+ S_IWOTH 00002权限，代表其他用户具有可写入的权限。
+ S_IXOTH 00001权限，代表其他用户具有可执行的权限。
+ 若所有欲核查的权限都通过了检查则返回0值，表示成功，只要有一个
+ 权限被禁止则返回-1.
+ EEXIST 参数pathname所指的文件已存在，却使用了O_CREAT和O_EXCL旗杆
+ EACCESS 参数pathname所指的文件不符合所要求测试的权限。
+ EROFS 欲测试写入权限的文件存在于只读文件系统内。
+ EFAULT 参数pathname指针超出可存取内存空间。
+ EINVAL 参数mode不正确。
+ ENAMETOOLONG 参数pathname太长。
+ ENOTDIR 参数pathname不是目录。
+ ENOMEM 核心内存不足。
+ ELOOP 参数pathname有过多符号连接问题。
+ EIO I/O存取错误。
+ 使用access()作用户认证方面的判断要特别小心，例如在access()后再作
+ open()空文件可能会造成系统安全上的问题。
  */
-void wd_(void)
+void wd_open(void)
+{
+    int fd, size;
+    char s[] = "Linux Programmer!\n", buffer[80];
+    fd = open("/tmp/temp", O_WRONLY | O_CREAT);
+    write(fd, s, sizeof(s));
+    close(fd);
+    fd = open("/tmp/temp", O_RDONLY);
+    size = read(fd, buffer, sizeof(buffer));
+    close(fd);
+    printf("%s", buffer);
+}
+
+/***
+ ssize_t read(int fd, void* buf, size_t count);
+ 由已打开的文件读取数据
+ read()会把参数fd所指的文件传送count个字节到buf指针所指的内存中。
+ 若参数count为0，则read()不会有作用并返回0。返回值为实际读取到的
+ 字节数，如果返回0，表示已到达文件尾或是无可读取的数据，此外文件
+ 读写位置会随读取到的字节移动。如果顺利read()会返回实际读到的
+ 字节数，最好能将返回值与参数count作比较，若返回的字节数比较要求
+ 读取的字节数少，则有可能读到了文件尾、从管道(pipe)或终端机读取，
+ 或者是read()被信号中断了读取动作。当有错误发生时则返回-1，错误
+ 代码存入errno中，而文件读写位置则无法预期。
+ EINTR此调用被信号所中断。
+ EAGAIN当使用不可阻断I/O时(O_NONBLOCK),若无数据可读取则返回此值。
+ EBADF参数fd非有效的文件描述符，或该文件已关闭。
+ */
+void wd_read(void)
 {
 }
 
 /***
-
+ int sync(void);
+ 将缓冲区数据写回磁盘
+ sync()负责将系统缓冲区数据写回磁盘，以确保数据同步。
+ 返回0.
  */
-void wd_(void)
+void wd_sync(void)
 {
 }
 
 /***
-
+ ssize_t write(int fd, const void* buf, size_t count);
+ 将数据写入已打开的文件内
+ write()会把参数buf所指的内存写入count个字节到参数fd所指的文件内。
+ 当然，文件读写位置也会随之移动。如果顺利write()会返回实际写入的
+ 字节数。当有错误发生时则返回-1，错误代码存入errno中。
+ EINTR 此调用被信号所中断。
+ EAGAIN 当使用不可阻断I/O时(O_NONBLOCK)，若无数据可读取则返回此值
+ EADF 参数fd非有效的文件描述符，或该文件已关闭。
  */
-void wd_(void)
+void wd_write(void)
 {
 }
 
 /***
-
+ void clearerr(FILE* stream);
+清除文件流的错误旗标
+ clearerr()清除参数stream指定的文件流所使用的错误旗标。
  */
-void wd_(void)
+void wd_clearerr(void)
 {
 }
 
 /***
-
+ int fclose(FILE* stream);
+ 关闭文件
+ fclose()用来关闭先前fopen()打开的文件。此动作会让缓冲区内的数据
+ 写入文件中，并释放系统所提供的文件资源。若关文件动作成功则返回
+ 0，有错误发生时则返回EOF并把错误代码存到errno。
+ EBADF表示参数stream非已打开的文件。
  */
-void wd_(void)
+void wd_fclose(void)
 {
 }
 
 /***
-
+ FILE* fdopen(int fildes, const char* mode);
+ 将文件描述符转为文件指针
+ fdopen()会将参数fildes的文件描述符转换为对应的文件指针后返回。
+ 参数mode字符串则代表着文件指针的流形态，此形态必须和原告文件
+ 描述符读写模式相同。转换成功时返回指向该流的文件指针。失败则
+ 返回NULL，并把错误代码存在errno中。
  */
-void wd_(void)
+void wd_fdopen(void)
+{
+    FILE* fp = fdopen(0, "w+");
+    fprintf(fp, "%s\n", "hello!");
+    fclose(fp);
+}
+
+/***
+ int feof(FILE* stream);
+ 检查文件流是否读到了文件尾
+ feof()用来侦测是否读取到了文件尾，尾数stream为fopen()返回之文件
+ 指针。如果已到达文件尾则返回非零值，其他情况返回0。
+ 返回非零值代表已到达文件尾。
+ */
+void wd_feof(void)
 {
 }
 
 /***
-
+ int fflush(FILE* stream);
+ 更新缓冲区
+ fflush()会强迫将缓冲区内的数据写回参数stream指定的文件中。如果
+ 参数stream为NULL，fflush()会将所有打开的文件数据更新。成功返回
+ 0，失败返回EOF，错误代码在于errno中。
+ EBADF 参数stream指定的文件未被打开，或打开状态为只读。
  */
-void wd_(void)
+void wd_fflush(void)
 {
 }
 
 /***
-
+ int fgetc(FILE* stream);
+ 由文件中读取一个字符
+ fgetc()用来从参数stream所指的文件中读取一个字符。若读到文件尾而无
+ 数据时便返回EOF。
+ fgetc()会返回读取到的字符，若返回EOF则表示到了文件尾。
  */
-void wd_(void)
+void wd_fgetc(void)
 {
+    FILE* fp;
+    int c;
+    fp = fopen("exist", "r");
+
+    while ((c = fgetc(fp)) != EOF)
+    {
+        printf("%c", c);
+    }
+
+    fclose(fp);
 }
 
 /***
-
+ char* fgets(char* s, int size, FILE* stream);
+ 由文件中读取一字符串
+ fgets()用来从参数stream所指的文件内读入字符并存到参数s所指的内存
+ 空间，直到出现换行字符、读到文件尾或是已读了size-1个字符为止，
+ 最后会加上NULL作为字符串结束。
+ fgets()若成功则返回s指针，返回NULL则表示有错误发生。
  */
-void wd_(void)
+void wd_fgets(void)
 {
-}
-
-/***
-
- */
-void wd_(void)
-{
-}
-
-/***
-
- */
-void wd_(void)
-{
+    char s[80];
+    fputs(fgets(s, 80, stdin), stdout);
 }
 
 
