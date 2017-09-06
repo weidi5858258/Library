@@ -1,7 +1,7 @@
-#一个实用的makefile，能自动编译当前目录下所有.c/.cpp源文件，支持二者混合编译
-#并且当某个.c/.cpp、.h或依赖的源文件被修改后，仅重编涉及到的源文件，未涉及的不编译
-#详解文档：http://blog.csdn.net/huyansoft/article/details/8924624
-#author：胡彦 2013-5-21
+# 一个实用的makefile，能自动编译当前目录下所有.c/.cpp源文件，
+# 支持二者混合编译.并且当某个.c/.cpp、.h或依赖的源文件被修改后，
+# 仅重编涉及到的源文件，未涉及的不编译.详解文档：
+# http://blog.csdn.net/huyansoft/article/details/8924624
 
 #----------------------------------------------------------
 #编译工具用g++，以同时支持C和C++程序，以及二者的混合编译
@@ -10,10 +10,14 @@ CC=g++
 #使用$(winldcard *.c)来获取工作目录下的所有.c文件的列表
 #sources:=main.cpp command.c
 
-#变量sources得到当前目录下待编译的.c/.cpp文件的列表，两次调用winldcard、结果连在一起即可
+# 变量sources得到当前目录下待编译的.c/.cpp文件的列表，
+# 两次调用winldcard、结果连在一起即可
 sources:=$(wildcard *.c) $(wildcard *.cpp)
 
-#变量objects得到待生成的.o文件的列表，把sources中每个文件的扩展名换成.o即可。这里两次调用patsubst函数，第1次把sources中所有.cpp换成.o，第2次把第1次结果里所有.c换成.o
+# 变量objects得到待生成的.o文件的列表，
+# 把sources中每个文件的扩展名换成.o即可。
+# 这里两次调用patsubst函数，第1次把sources中所有.cpp换成.o，
+# 第2次把第1次结果里所有.c换成.o
 objects:=$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(sources)))
 
 #变量dependence得到待生成的.d文件的列表，把objects中每个扩展名.o换成.d即可。也可写成$(patsubst %.o,%.d,$(objects))
@@ -44,6 +48,7 @@ set -e; rm -f $@; \
 $(CC) -MM $(CPPFLAGS) $< > $@.$$$$; \
 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 rm -f $@.$$$$
+rm -f *.d.*
 endef
 
 #指示如何由.c生成其依赖规则文件.d
