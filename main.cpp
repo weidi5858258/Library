@@ -1,6 +1,7 @@
 //#include <QCoreApplication>
 #include <stdio.h>
-#include "wd_c_function.h"
+#include "wd_string.h"
+// #include "wd_c_function.h"
 
 void test(void);
 
