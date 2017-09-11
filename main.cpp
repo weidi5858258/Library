@@ -22,8 +22,9 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void point(void){
-	int i = 1;
+void point(void)
+{
+    int i = 1;
     int* p;
     p = &i;
     cout << "i: 		" << i << endl;
@@ -55,6 +56,4 @@ void test(void)
     // int* pb = pa;
     // int* pa = &a;
     // const int* pb = pa;
-    
-
 }
